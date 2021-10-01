@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/models/user.model';
 import { Repository } from 'typeorm';
@@ -32,5 +41,13 @@ export class UserController {
     await this.userRepo.findOneOrFail(+id);
     this.userRepo.update({ id: +id }, body);
     return this.userRepo.findOneOrFail(+id);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  async destroy(@Param('id') id: string): Promise<void> {
+    // 204 - No content
+    await this.userRepo.findOneOrFail(+id);
+    this.userRepo.delete(id);
   }
 }

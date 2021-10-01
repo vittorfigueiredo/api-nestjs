@@ -20,3 +20,6 @@ Content-Type: application/json
   "name": "André Figueiredo",
   "email": "andre@gmail.com"
 }
+
+###
+DELETE http://localhost:3000/users/1
