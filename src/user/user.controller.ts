@@ -7,8 +7,12 @@ import {
   Param,
   Post,
   Put,
+  ValidationPipe,
 } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserResponse } from 'src/api-doc/user.response';
+import { UserDto } from 'src/dto/user.dto';
 import { User } from 'src/models/user.model';
 import { Repository } from 'typeorm';
 
@@ -25,13 +29,26 @@ export class UserController {
     return this.userRepo.find();
   }
 
+  @ApiOkResponse({
+    type: UserResponse,
+  })
   @Get(':id')
   show(@Param('id') id: string): Promise<User> {
     return this.userRepo.findOneOrFail(id);
   }
 
+  @ApiCreatedResponse({
+    type: UserResponse,
+  })
   @Post()
-  async store(@Body() body: User): Promise<User> {
+  async store(
+    @Body(
+      new ValidationPipe({
+        errorHttpStatusCode: 422,
+      }),
+    )
+    body: UserDto,
+  ): Promise<User> {
     const user = this.userRepo.create(body);
     return this.userRepo.save(user);
   }
