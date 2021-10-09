@@ -13,7 +13,11 @@ import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './create-user-dto';
 
-//API REST - POST users
+/**
+ * O controller recebe as requisições e envia os dados
+ * através do DTO para o service processar as regras de negócio
+ * e retorna a resposta.
+ */
 @Controller('users')
 export class UsersController {
   constructor(
@@ -32,6 +36,11 @@ export class UsersController {
   }
 
   @Post()
+  /**
+   * Aqui no body é passado o dto CreateUserDto,
+   * que contém somente os dados que queremos para
+   * realizar o post.
+   */
   async store(@Body() body: CreateUserDto): Promise<User> {
     const user = this.userRepository.create(body);
     return this.userRepository.save(user);
@@ -47,7 +56,6 @@ export class UsersController {
   @Delete(':id')
   @HttpCode(204)
   async destroy(@Param('id') id: string): Promise<void> {
-    // 204 - No content
     await this.userRepository.findOneOrFail(+id);
     this.userRepository.delete(id);
   }

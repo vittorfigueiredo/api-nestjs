@@ -5,6 +5,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+/**
+ * Entity é o mapeamento de uma tabela do banco de dados.
+ */
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
